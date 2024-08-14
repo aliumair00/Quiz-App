@@ -1,10 +1,11 @@
 import React from 'react'
 import Nav from './assets/Components/Nav'
-import Quiz from './assets/Components/Quiz'
-
+import Quiz from './assets/Components/Quiz' 
+import img from "../public/background.jpg"
 const App = () => {
   return (
-    <div>
+    <div className=' h-screen  ' >
+      <img src={img} alt="" className='w-full h-screen absolute -z-50' />
       <Nav />
       <Quiz />
     </div>

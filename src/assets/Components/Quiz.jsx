@@ -6,41 +6,60 @@ const Quiz = () => {
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [answers, setAnswers] = useState([]);
   const [isFinished, setIsFinished] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState(
+    quizData.map(() => "")
+  );
 
   const handleNextQuestion = (question) => {
     const updatedAnswers = [...answers];
     updatedAnswers[currentQuestion] = {
       question: question.question,
-      answer: selectedQuestion,
+      answer: selectedOptions[currentQuestion],
     };
     setAnswers(updatedAnswers);
 
-    if (question.correct === selectedQuestion || question.skip) {
+    // Check if no option is selected and simply move to the next question
+    if (!selectedOptions[currentQuestion]) {
+      if (currentQuestion < quizData.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+      } else {
+        setIsFinished(true);
+      }
+      return; // Prevent further execution
+    }
+
+    if (question.correct === selectedOptions[currentQuestion] || question.skip) {
       if (currentQuestion < quizData.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
         setIsFinished(true);
       }
     } else {
-      if(question.skip){
+      if (question.skip) {
         if (currentQuestion < quizData.length - 1) {
           setCurrentQuestion(currentQuestion + 1);
         } else {
           setIsFinished(true);
         }
-      }else{
-        if(question.next){
-          setCurrentQuestion(question.next-1);
-        }else{
-          setIsFinished(true)
+      } else {
+        if (question.next) {
+          setCurrentQuestion(question.next - 1);
+        } else {
+          setIsFinished(true);
         }
       }
     }
   };
 
+  const handleCheckboxChange = (option) => {
+    const updatedSelectedOptions = [...selectedOptions];
+    updatedSelectedOptions[currentQuestion] = option;
+    setSelectedOptions(updatedSelectedOptions);
+  };
+
   const handleRestart = () => {
     setCurrentQuestion(0);
-    setSelectedQuestion("");
+    setSelectedOptions(quizData.map(() => ""));
     setAnswers([]);
     setIsFinished(false);
   };
@@ -48,7 +67,7 @@ const Quiz = () => {
   return (
     <div className='Quiz'>
       {!isFinished ? (
-        <div className='container border-4 border-[#011b39] flex flex-col items-center gap-4 md:gap-6 lg:gap-8 flex-wrap h-auto max-w-md mx-auto p-4 mt-6 rounded-md'>
+        <div className='container text-gray-200 bg-white/10 backdrop-blur-sm shadow-md flex flex-col items-center gap-4 md:gap-6 lg:gap-8 flex-wrap h-auto max-w-md mx-auto p-4 mt-6 rounded-md'>
           <div className='startNow mt-6 mb-4 text-xl md:text-2xl lg:text-3xl font-bold text-[#011b39] flex items-center justify-center'>
             <h1>Start Now!</h1>
           </div>
@@ -63,7 +82,8 @@ const Quiz = () => {
                     type='radio'
                     name='option'
                     value={option}
-                    onChange={() => setSelectedQuestion(option)}
+                    checked={selectedOptions[currentQuestion] === option}
+                    onChange={() => handleCheckboxChange(option)}
                   />
                   <span>{option}</span>
                 </li>
@@ -94,7 +114,7 @@ const Quiz = () => {
           </div>
         </div>
       ) : (
-        <div className='thanku border-4 border-[#011b39] flex flex-col items-center gap-4 md:gap-6 lg:gap-8 flex-wrap h-auto max-w-md mx-auto p-4 mt-6 rounded-md'>
+        <div className='thanku text-gray-200 bg-white/10 backdrop-blur-sm shadow-md flex flex-col items-center gap-4 md:gap-6 lg:gap-8 flex-wrap h-auto max-w-md mx-auto p-4 mt-6 rounded-md'>
           <h1 className='text-xl md:text-2xl lg:text-3xl font-bold mt-6'>Thank YOU</h1>
           <ul className='w-full mt-4'>
             {answers.map((answer, index) => (

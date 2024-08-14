@@ -3,7 +3,7 @@ import React from 'react'
 import './nav.css'
 const Nav = () => {
   return (
-    <div className=' nav  w-full h-18 flex items-center justify-between mt-[1%]   ' >
+    <div className=' nav  w-full h-18 flex items-center justify-between ' >
         <div className='logo logo w-[5vw]  ml-[40px] ' >
             <img  src={'logo.svg'} alt=""  />
         </div>
