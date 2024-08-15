@@ -18,14 +18,14 @@ const Quiz = () => {
     };
     setAnswers(updatedAnswers);
 
-    // Check if no option is selected and simply move to the next question
+    
     if (!selectedOptions[currentQuestion]) {
       if (currentQuestion < quizData.length - 1) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
         setIsFinished(true);
       }
-      return; // Prevent further execution
+      return; 
     }
 
     if (question.correct === selectedOptions[currentQuestion] || question.skip) {
